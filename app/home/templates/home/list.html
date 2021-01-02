@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block content %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <br>
+    <table id="table1">
+      <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Price</th>
+            <th scope="col">Tags</th>
+            <th scope="col">Ingredients</th>
+            <th scope="col">Time</th>
+            <th scope="col">Link</th>
+            <th scope="col">Edit</th>
+          </tr>
+      </thead>
+    </table>
+    {% block footer %}
+    {%endblock%}
+  </body>
+</html>
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.12.6/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.12.6/dist/sweetalert2.all.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script>
+  $.ajax({
+   type: 'GET',
+   url: '/api/recipe/recipes',
+   success: function(res){
+     var body = document.getElementsByTagName("body")[0];
+     var tbl = document.getElementById("table1");
+     var tblBody = document.createElement("tbody");
+     for (const i in res) {
+       var row = document.createElement("tr");
+       var cell = document.createElement("td");
+       var cellText = document.createTextNode(res[i].id);
+       var cell0 = document.createElement("td");
+       var cellText0 = document.createTextNode(res[i].title);
+       var cell1 = document.createElement("td");
+       var cellText1 = document.createTextNode(res[i].price);
+       var cell2 = document.createElement("td");
+       var cellText2 = document.createTextNode(res[i].tags);
+       var cell3 = document.createElement("td");
+       var cellText3 = document.createTextNode(res[i].ingredients);
+       var cell4 = document.createElement("td");
+       var cellText4 = document.createTextNode(res[i].time_minutes);
+       var cell5 = document.createElement("td");
+       var cellText5 = document.createTextNode(res[i].link);
+
+       cell.appendChild(cellText);
+       cell0.appendChild(cellText0);
+       cell1.appendChild(cellText1);
+       cell2.appendChild(cellText2);
+       cell3.appendChild(cellText3);
+       cell4.appendChild(cellText4);
+       cell5.appendChild(cellText5);
+       row.appendChild(cell);
+       row.appendChild(cell0);
+       row.appendChild(cell1);
+       row.appendChild(cell2);
+       row.appendChild(cell3);
+       row.appendChild(cell4);
+       row.appendChild(cell5);
+       tblBody.appendChild(row);
+     }
+     tbl.appendChild(tblBody);
+     body.appendChild(tbl);
+     tbl.setAttribute("class", "table table-bordered table-striped");
+   },
+
+})
+Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'Your work has been saved',
+  showConfirmButton: false,
+  timer: 1500
+})
+</script>
+{% endblock %}
