@@ -9,65 +9,59 @@
 </head>
 
 <body class="">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
   <form>
-    {% csrf_token %}
     <br>
+
     <label for="T">Title: </label>
     <input type="text" name="T" value="">
     <br>
-    <label for="Ingr">Ingredients: </label>
-    <select class="" name="Ingr">
-      {% for ing in Ing %}
-      <option value="ing.pk">{{ing}}</option>
-      {%endfor%}
-    </select>
-    <br>
-    <label for="Tag">Tags: </label>
-    <select class="" name="Tag">
-      {% for tag in Tag %}
-      <option value="Tag.pk">{{tag}}</option>
-      {%endfor%}
-    </select>
-    <br>
+
     <label for="Time">Time: </label>
     <input type="text" name="Time" value="">
     <br>
+
     <label for="P">Price: </label>
     <input type="text" name="P" value="">
     <br>
+
     <label for="link">Link: </label>
     <input type="text" name="link" value="">
     <br>
+
     <input type="submit" name="submit" value="Post">
   </form>
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
   <script>
   $('form').on('submit', function(e) {
-    e.preventDefault()
-      var data = {
-        title: $('[name="T"]').val(),
-        tags: $('[name="Tag"]').val(),
-        ingredients: $('[name="Ingr"]').val(),
-        time_minutes: $('[name="Time"]').val(),
-        price: $('[name="P"]').val(),
-        link: $('[name="link"]').val()
-      };
+  e.preventDefault()
+  var data = {
+    title: $('[name="T"]').val(),
+    time_minutes: $('[name="Time"]').val(),
+    price: $('[name="P"]').val(),
+    link: $('[name="link"]').val()
+  };
 
-      var headers = {
-        'X-CSRFToken': '{{ csrf_token }}'
-      }; // Inject our token into the javascript using a template tag
-      $.ajax({
-        type: 'POST',
-        data: data,
-        headers: headers, // Set the headers in the request
-        url: '/api/recipe/recipes/',
-        success: function(res) {
-          console.log(res)
-        },
-      });
-  })
+  var headers = {
+    'X-CSRFToken': '{{ csrf_token }}'
+  }; // Inject our token into the javascript using a template tag
 
-  </script>
+  $.ajax({
+    type: 'POST',
+    data: data,
+    headers: headers, // Set the headers in the request
+    url: '/api/recipe/recipes/',
+    success: function(res) {
+      console.log(res);
+    },
+    error: function(res) {
+      var errorMessage = res.status + ': ' + res.statusText;
+      console.error('Error Posting: ', errorMessage);
+    }
+  });
+});
+</script>
 </body>
 
 </html>
